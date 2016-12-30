@@ -302,6 +302,8 @@
 	var empty = document.getElementById("empty");
 	var clear = document.getElementById("clear");
 	var runBtn = document.getElementById("run");
+	var mousedown = false;
+
 
 	runBtn.onclick = () => {
 		// cleans old path
@@ -319,10 +321,29 @@
 		draw();
 	};
 
-	mapElm.onclick = (e) => {
+	// turns off square pacement
+	mapElm.onmouseup = e => { mousedown = false; };
+	mapElm.onmouseout = e => { mousedown = false; };	
+
+	// turns on square placement
+	mapElm.onmousedown = e => {
+		mousedown = true;
+		placeSquare(e);
+	};
+	mapElm.onmousemove = placeSquare;
+
+	// places a square on mouse location
+	function placeSquare(e)
+	{
+		if (!mousedown)
+			return;
+
 		// obtaining coordinates
 		var x = Math.round(e.clientX / 15) - 1;
 		var y = Math.round(e.clientY / 15) - 1;
+		if (x > 19) x = 19;
+		if (y > 19) y = 19;
+
 		//alert(x + " " + y);
 
 		// can't erase source/target
