@@ -14,11 +14,11 @@
 
 	var curr = { "x": 0, "y": 0 };
 	var target = { "x": 19, "y": 19 };
+
 	// character
 	coord[curr.x][curr.y] = 1;
 	// target
 	coord[target.x][target.y] = 4;
-
 
 	class Node
 	{
@@ -27,12 +27,6 @@
 			// tells you if the position is walkable
 			// is it a wall and stuff basically
 			this.walkable = walkable;
-
-
-			// ????
-			// point in the world the node represents
-			//this.worldPosition = worldPosition;
-			// ???
 
 			this.gridX = gridX;
 			this.gridY = gridY;
@@ -65,26 +59,15 @@
 
 	function runSearchAlgorithm()
 	{
-		var antistuck = 0;
-
 		var start = new Node(true, curr.x, curr.y);
 		start.gCost = 0;
 		start.hCost = target.x + target.y - start.gridX - start.gridY - 1;
-		//console.log(start.gCost + " " + start.hCost);
 
 		// discovered nodes to be evaluated
 		var open = [];
 		// set of nodes already evaluated
 		var closed = [];
-		open.push(start);
-		/*
-		var a = new Node(true, 4, 3);
-		open.push(a);
-		var b = new Node(true, 3, 3);
-		//open.push(b);*/
-		
-
-		// arr.splice(indextoget, howmany(usually 1))
+		open.push(start);		
 
 		var current;
 		while (true)
@@ -101,7 +84,6 @@
 				current.gridY == target.y)
 			{
 				console.log("path found!");
-				// would be return in a function
 				return current;
 			}
 
@@ -138,15 +120,7 @@
 					// adding neighbour to open nodes
 					open.push(currNode);
 				}
-				// set fcost of neighbour
-				// set parent of neighbour
-				//if neighbour is not in open
-				//	add to open
-
-
 			}
-			//break;
-
 
 			// no path found
 			if (open.length == 0)
@@ -155,8 +129,6 @@
 				return;
 			}
 
-			antistuck++;
-			if (antistuck > 999999) break;
 		}
 	}
 
@@ -183,8 +155,6 @@
 		return path;
 	}
 
-	//console.log(getCost(4, 4, { "x": 4, "y": 3 }));
-	//console.log(getCost(2, 4, curr));
 	// get's g/h cost depending on passed argument
 	// x y - current position
 	// target - destination
@@ -194,8 +164,6 @@
 	{
 		var n1 = Math.abs(target.x - x);
 		var n2 =  Math.abs(target.y - y);
-		//console.log(n1 + " " + n2);
-		//console.log(n1 + n2);
 		return n1 + n2;
 	}
 
@@ -350,8 +318,6 @@
 		if (x > 19) x = 19;
 		if (y > 19) y = 19;
 
-		//alert(x + " " + y);
-
 		// can't erase source/target
 		// can only have it's location changed
 		if (target.x == x && target.y == y &&
@@ -375,9 +341,7 @@
 		}
 
 		coord[x][y] = selected;
-
 		draw();
 	};
-
 
 })();
