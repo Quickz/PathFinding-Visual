@@ -104,7 +104,7 @@
 				// would be return in a function
 				return current;
 			}
-			
+
 			// obtaining neighbors
 			current.neighbours = getNeighbours(
 				current.gridX, current.gridY);
@@ -148,6 +148,12 @@
 			//break;
 
 
+			// no path found
+			if (open.length == 0)
+			{
+				console.log("path not found");
+				return;
+			}
 
 			antistuck++;
 			if (antistuck > 999999) break;
@@ -170,10 +176,10 @@
 		var path = [];
 		while (node)
 		{
-			console.log(node.gridX + " " + node.gridY);
+			//console.log(node.gridX + " " + node.gridY);
 			path.push({ "x": node.gridX, "y": node.gridY });
 			node = node.parent;
-		}console.log(path.length);
+		}console.log("path length: " + path.length);
 		return path;
 	}
 
