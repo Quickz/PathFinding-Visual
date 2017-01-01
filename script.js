@@ -1,45 +1,23 @@
 (function() {
 
-	// map
-	var coord = [];
-	for (let i = 0; i < 20; i++)
-	{
-		coord[i] = [];
-		for (let j = 0; j < 20; j++)
-			coord[i][j] = 0;
-	}
-
-	var mapElm = document.getElementById("map");
-	var map = mapElm.getContext("2d");
-
-	var curr = { "x": 0, "y": 0 };
-	var target = { "x": 19, "y": 19 };
-
-	// character
-	coord[curr.x][curr.y] = 1;
-	// target
-	coord[target.x][target.y] = 4;
-
 	class Node
 	{
-		constructor(walkable, gridX, gridY)
+		constructor(gridX, gridY, source, target)
 		{
-			// tells you if the position is walkable
-			// is it a wall and stuff basically
-			this.walkable = walkable;
-
 			this.gridX = gridX;
 			this.gridY = gridY;
 
 			// distance from starting node
-			this.gCost;
+			this.gCost = getCost(this.gridX,
+				this.gridY, target);
+
 			// distance from end node
-			this.hCost;
+			this.hCost = getCost(this.gridX,
+				this.gridY, source);
+
 			this.parent;
 			this.neighbours = [];
-			//this.heapIndex;
 
-			this.calculateCosts(curr, target);
 		}
 
 		get fCost()
@@ -47,19 +25,11 @@
 			return this.gCost + this.hCost;
 		}
 
-		calculateCosts(source, target)
-		{
-			this.hCost = getCost(this.gridX,
-				this.gridY, source);
-			this.gCost = getCost(this.gridX,
-				this.gridY, target);
-		}
-
 	}
 
 	function runSearchAlgorithm()
 	{
-		var start = new Node(true, curr.x, curr.y);
+		var start = new Node(source.x, source.y, source, target);
 		start.gCost = 0;
 		start.hCost = target.x + target.y - start.gridX - start.gridY - 1;
 
@@ -97,9 +67,8 @@
 			{
 				let currNode = current.neighbours[i];
 				
-				// checking if not walkable or closed
-				if (!currNode.walkable ||
-					findIndex(closed, currNode) >= 0)
+				// checking if it's in closed list
+				if (findIndex(closed, currNode) >= 0)
 					continue;
 
 				// if shorter path found
@@ -148,10 +117,10 @@
 		var path = [];
 		while (node)
 		{
-			//console.log(node.gridX + " " + node.gridY);
 			path.push({ "x": node.gridX, "y": node.gridY });
 			node = node.parent;
-		}console.log("path length: " + path.length);
+		}
+		console.log("path length: " + path.length);
 		return path;
 	}
 
@@ -172,16 +141,16 @@
 		var neighbours = [];
 		// top
 		if (validCoord(x, y - 1))
-			neighbours.push(new Node(true, x, y - 1));
+			neighbours.push(new Node(x, y - 1, source, target));
 		// right
 		if (validCoord(x + 1, y))
-			neighbours.push(new Node(true, x + 1, y));
+			neighbours.push(new Node(x + 1, y, source, target));
 		// bottom
 		if (validCoord(x, y + 1))
-			neighbours.push(new Node(true, x, y + 1));
+			neighbours.push(new Node(x, y + 1, source, target));
 		// left
 		if (validCoord(x - 1, y))
-			neighbours.push(new Node(true, x - 1, y));
+			neighbours.push(new Node(x - 1, y, source, target));
 
 		return neighbours;
 	}
@@ -267,45 +236,6 @@
 		}
 	}
 
-	draw();
-
-	var selected = 0;
-	var source = document.getElementById("source");
-	var targetBtn = document.getElementById("target");
-	var wall = document.getElementById("wall");
-	var empty = document.getElementById("empty");
-	var clear = document.getElementById("clear");
-	var runBtn = document.getElementById("run");
-	var mousedown = false;
-
-
-	runBtn.onclick = () => {
-		// cleans old path
-		clearSquare(3);
-		run();
-	};
-
-	source.onclick = () => { selected = 1 };
-	targetBtn.onclick = () => { selected = 4 };
-	wall.onclick = () => { selected = 2 };
-	empty.onclick = () => { selected = 0 };
-	clear.onclick = () => {
-		clearSquare(2);
-		clearSquare(3);
-		draw();
-	};
-
-	// turns off square pacement
-	mapElm.onmouseup = e => { mousedown = false; };
-	mapElm.onmouseout = e => { mousedown = false; };	
-
-	// turns on square placement
-	mapElm.onmousedown = e => {
-		mousedown = true;
-		placeSquare(e);
-	};
-	mapElm.onmousemove = placeSquare;
-
 	// places a square on mouse location
 	function placeSquare(e)
 	{
@@ -322,7 +252,7 @@
 		// can only have it's location changed
 		if (target.x == x && target.y == y &&
 			selected != 4 || selected != 1 &&
-			curr.x == x && curr.y == y)
+			source.x == x && source.y == y)
 			return;
 
 		// deleting old source/target
@@ -336,12 +266,77 @@
 		else if (selected == 1)
 		{
 			clearSquare(selected);
-			curr.x = x;
-			curr.y = y;
+			source.x = x;
+			source.y = y;
 		}
 
 		coord[x][y] = selected;
 		draw();
+	}
+
+	
+	// buttons
+	var sourceBtn = document.getElementById("source");
+	var targetBtn = document.getElementById("target");
+	var wallBtn = document.getElementById("wall");
+	var emptyBtn = document.getElementById("empty");
+	var runBtn = document.getElementById("run");
+	var clearBtn = document.getElementById("clear");
+
+	var selected = 0;
+	var mousedown = false;
+
+	// generating empty coordinates for the grid
+	var coord = [];
+	for (let i = 0; i < 20; i++)
+	{
+		coord[i] = [];
+		for (let j = 0; j < 20; j++)
+			coord[i][j] = 0;
+	}
+
+	var mapElm = document.getElementById("map");
+	var map = mapElm.getContext("2d");
+
+	// character
+	var source = { "x": 0, "y": 0 };
+	coord[source.x][source.y] = 1;
+	// target
+	var target = { "x": 19, "y": 19 };
+	coord[target.x][target.y] = 4;
+	
+	draw();
+
+
+	sourceBtn.onclick = () => { selected = 1 };
+	targetBtn.onclick = () => { selected = 4 };
+	wallBtn.onclick = () => { selected = 2 };
+	emptyBtn.onclick = () => { selected = 0 };
+
+	// runs the algorithm
+	runBtn.onclick = () => {
+		// cleans old path
+		clearSquare(3);
+		run();
 	};
+
+	// clears the map
+	clearBtn.onclick = () => {
+		clearSquare(2);
+		clearSquare(3);
+		draw();
+	};
+
+	// turns off square placement
+	mapElm.onmouseup = e => { mousedown = false; };
+	mapElm.onmouseout = e => { mousedown = false; };	
+
+	// turns on square placement
+	mapElm.onmousedown = e => {
+		mousedown = true;
+		placeSquare(e);
+	};
+
+	mapElm.onmousemove = placeSquare;
 
 })();
