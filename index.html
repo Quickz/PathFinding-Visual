@@ -6,14 +6,38 @@
 	<title>Test</title>
 </head>
 <body>
-	<canvas id="map" width="300" height="300"></canvas>
-	<br>
-	<button id="run">Run</button>
-	<button id="source">Source</button>
-	<button id="target">Target</button>
-	<button id="wall">Wall</button>
-	<button id="empty">Empty</button>
-	<button id="clear">Clear All</button>
+
+	<div id="content">
+		<!-- grid -->
+		<canvas id="map" width="300" height="300"></canvas>
+		
+		<!-- UI -->
+		<div id="sq-container">
+			<!-- squares -->
+			<div id="source" class="selection-square">
+				<div></div>Source
+			</div>
+			<div id="target" class="selection-square">
+				<div></div>Target
+			</div>
+			<div id="wall" class="selection-square">
+				<div></div>Wall
+			</div>
+			<div id="empty" class="selection-square">
+				<div></div>Empty
+			</div>
+
+			<!-- buttons -->
+			<button id="controls" class="ui-btn">Controls</button>
+			<button id="clear" class="ui-btn">Clear All</button>
+			<button id="run" class="ui-btn">Run</button>
+
+		</div>
+
+	</div>
+
+	<!-- logic -->
 	<script src="script.js"></script>
+	
 </body>
 </html>

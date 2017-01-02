@@ -308,10 +308,38 @@
 	draw();
 
 
-	sourceBtn.onclick = () => { selected = 1 };
-	targetBtn.onclick = () => { selected = 4 };
-	wallBtn.onclick = () => { selected = 2 };
-	emptyBtn.onclick = () => { selected = 0 };
+	sourceBtn.onclick = () => {
+		selectSquare(1);
+	};
+	targetBtn.onclick = () => {
+		selectSquare(4);
+	};
+	wallBtn.onclick = () => {
+		selectSquare(2);
+	};
+	emptyBtn.onclick = () => {
+		selectSquare(0);
+	};
+
+	function selectSquare(n)
+	{
+		var btn;
+		switch(n)
+		{
+			case 0: btn = emptyBtn; break;
+			case 1: btn = sourceBtn; break;
+			case 2: btn = wallBtn; break;
+			case 4: btn = targetBtn; break;
+		}
+
+		emptyBtn.style.borderColor = "#c3c3c3";
+		sourceBtn.style.borderColor = "#c3c3c3";
+		wallBtn.style.borderColor = "#c3c3c3";
+		targetBtn.style.borderColor = "#c3c3c3";
+
+		btn.style.borderColor = "black";
+		selected = n;
+	}
 
 	// runs the algorithm
 	runBtn.onclick = () => {
