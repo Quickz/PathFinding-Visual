@@ -282,6 +282,7 @@
 	var emptyBtn = document.getElementById("empty");
 	var runBtn = document.getElementById("run");
 	var clearBtn = document.getElementById("clear");
+	var controlBtn = document.getElementById("controls");
 
 	var selected = 0;
 	var mousedown = false;
@@ -355,6 +356,12 @@
 		draw();
 	};
 
+	controlBtn.onclick = () => {
+		alert("1,2,3,4 - Select a Square \n" +
+			  "Esc/Del - Clear all \n" +
+			  "Enter/Space - Run");
+	};
+
 	// turns off square placement
 	mapElm.onmouseup = e => { mousedown = false; };
 	mapElm.onmouseout = e => { mousedown = false; };	
@@ -366,5 +373,41 @@
 	};
 
 	mapElm.onmousemove = placeSquare;
+
+	// controls
+	document.onkeydown = e => {
+
+		switch (e.keyCode)
+		{
+			// 1
+			case 49:
+				selectSquare(1);
+				break;
+			// 2
+			case 50:
+				selectSquare(4);
+				break;
+			// 3
+			case 51:
+				selectSquare(2);
+				break;
+			// 4
+			case 52:
+				selectSquare(0);
+				break;
+			// space
+			case 32:
+			// enter
+			case 13:
+				runBtn.click();
+				break;
+			// esc
+			case 27:
+			// del
+			case 46:
+				clearBtn.click();
+				break;
+		}
+	}
 
 })();
