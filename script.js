@@ -22,7 +22,12 @@
 
 		get fCost()
 		{
-			return this.gCost + this.hCost;
+			// temporary - needs to be refactored !!!
+			if (!this.parent) return 0;
+			var a = this.parent.fCost;
+			var b = this.gCost + this.hCost;
+			var c = a - b > 0 ? a + 1 : a - b > 0 ? a - 1 : 0;
+			return c;
 		}
 
 	}
@@ -85,6 +90,8 @@
 				if (existing < 0)
 				{
 					currNode.parent = current;
+
+
 
 					// adding neighbour to open nodes
 					open.push(currNode);
