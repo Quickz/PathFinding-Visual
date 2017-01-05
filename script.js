@@ -15,19 +15,33 @@
 			this.hCost = getCost(this.gridX,
 				this.gridY, source);
 
-			this.parent;
+			this.nodeParent;
 			this.neighbours = [];
 
 		}
 
 		get fCost()
 		{
-			// temporary - needs to be refactored !!!
-			if (!this.parent) return 0;
-			var a = this.parent.fCost;
-			var b = this.gCost + this.hCost;
-			var c = a - b > 0 ? a + 1 : a - b > 0 ? a - 1 : 0;
-			return c;
+			return this.gCost + this.hCost;
+		}
+
+		set parent(p)
+		{
+			// recalculating the costs
+			// based on parent's path
+			var dif = p.gCost - this.gCost;
+			this.gCost = p.gCost +(dif > 0 ? 1 : dif < 0 ? -1 : 0);
+
+			dif = p.hCost - this.hCost;
+			this.hCost = p.hCost + (dif > 0 ? 1 : dif < 0 ? -1 : 0);
+
+			// setting parent
+			this.nodeParent = p;
+		}
+
+		get parent()
+		{
+			return this.nodeParent;
 		}
 
 	}
