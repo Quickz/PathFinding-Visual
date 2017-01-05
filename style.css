@@ -32,7 +32,7 @@
 /* selected square button design  */
 .selection-square {
     float: left;
-    background: #e1e1e1;
+    background: #e9e9e9;
     text-align: center;
     font-family: calibri;
     border: solid #c3c3c3 2px;
@@ -49,26 +49,23 @@
 }
 
 /* selected square colors */
-#source div { background: green; }
-#target div { background: blue; }
-#wall div { background: red; }
+#source div { background: #4CAF50; }
+#target div { background: #2196F3; }
+#wall div { background: #F44336; }
 #empty div { background: white; }
-
-/* ui button colors */
-#controls { background: blue; }
-#controls:hover { background: #4d4dff; }
-#clear { background: red; }
-#clear:hover { background: #ff4d4d; }
-#run { background: green;  }
-#run:hover { background: #00cc00; }
 
 /* ui button class */
 .ui-btn {
-    background: green;
+    background: #F57F17;
     color: white;
     border: none;
     padding: 5px;
     width: 100%;
-    height: 31px;
-    margin: 0px 0;
+    height: 29px;
+    margin: 1px 0;
 }
+.ui-btn:hover {
+    background: #F9A825;
+}
+
+#controls { margin-top: 2px; }

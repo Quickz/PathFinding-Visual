@@ -210,14 +210,14 @@
 	{
 		switch (number)
 		{
-			// character
-			case 1: return "green";
-			// wall
-			case 2: return "red";
+			// character - green
+			case 1: return "#4caf50";
+			// wall - red
+			case 2: return "#f44336";
 			// path
 			case 3: return "lightgreen";
-			// target
-			case 4: return "blue";
+			// target - blue
+			case 4: return "#2196F3";
 			// empty square
 			default: return "white";
 		}
@@ -345,7 +345,7 @@
 		wallBtn.style.borderColor = "#c3c3c3";
 		targetBtn.style.borderColor = "#c3c3c3";
 
-		btn.style.borderColor = "black";
+		btn.style.borderColor = "#F57F17";
 		selected = n;
 	}
 
