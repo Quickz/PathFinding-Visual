@@ -80,11 +80,15 @@
 	{
 		if (!mousedown)
 			return;
+		
 		// obtaining coordinates
 		var x = Math.ceil((e.clientX - mapElm.offsetLeft) / 15) - 1;
 		var y = Math.ceil((e.clientY - mapElm.offsetTop) / 15) - 1;
-		if (x > 19) x = 19;
-		if (y > 19) y = 19;
+		
+		// preventing coordinates from going
+		// out of bounds
+		x = x > 19 ? 19 : x < 0 ? 0 : x;
+		y = y > 19 ? 19 : y < 0 ? 0 : y;
 
 		// can't erase source/target
 		// can only have it's location changed
