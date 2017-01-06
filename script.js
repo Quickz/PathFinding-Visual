@@ -223,6 +223,7 @@
 	clearBtn.onclick = () => {
 		clearSquare(2);
 		clearSquare(3);
+		clearSquare(5);
 		draw();
 	};
 
