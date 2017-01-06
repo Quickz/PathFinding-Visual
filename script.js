@@ -80,10 +80,9 @@
 	{
 		if (!mousedown)
 			return;
-
 		// obtaining coordinates
-		var x = Math.round(e.clientX / 15) - 1;
-		var y = Math.round(e.clientY / 15) - 1;
+		var x = Math.ceil((e.clientX - mapElm.offsetLeft) / 15) - 1;
+		var y = Math.ceil((e.clientY - mapElm.offsetTop) / 15) - 1;
 		if (x > 19) x = 19;
 		if (y > 19) y = 19;
 
