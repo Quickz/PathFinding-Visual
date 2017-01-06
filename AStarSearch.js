@@ -34,7 +34,7 @@ const AStarSearch = {
 				current.gridY == target.y)
 			{
 				console.log("path found!");
-				return current;
+				return { "path": current, "visited": closed };
 			}
 
 			// obtaining neighbors

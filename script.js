@@ -3,8 +3,16 @@
 	function run()
 	{
 		var current = AStarSearch.run(source, target, coord);
-		var path = findPath(current);
 		
+		// path not found
+		if (!current) return;
+
+		var path = findPath(current.path);
+		var visited = findVisited(current.visited);
+
+		for (let i = 0; i < visited.length; i++)
+			coord[visited[i].x][visited[i].y] = 5;
+
 		// traveling through the path
 		for (let i = 1; i < path.length - 1; i++)
 			coord[path[i].x][path[i].y] = 3;
@@ -22,6 +30,20 @@
 		}
 		console.log("path length: " + path.length);
 		return path;
+	}
+
+	function findVisited(nodes)
+	{
+		var visited = [];
+		for (let i = 0; i < nodes.length; i++)
+		{
+			let x = nodes[i].gridX;
+			let y = nodes[i].gridY;
+			if ( (x != target.x || y != target.y) &&
+				 (x != source.x || y != source.y) )
+				visited.push({ "x": x, "y": y });
+		}
+		return visited;
 	}
 
 	// fills map acoording to map array contents
@@ -50,6 +72,8 @@
 			case 3: return "lightgreen";
 			// target - blue
 			case 4: return "#2196F3";
+			// visited squares
+			case 5: return "#cdffcc";
 			// empty square
 			default: return "white";
 		}
@@ -185,9 +209,14 @@
 
 	// runs the algorithm
 	runBtn.onclick = () => {
+
 		// cleans old path
 		clearSquare(3);
+		clearSquare(5);
+
+		// searching a new one
 		run();
+
 	};
 
 	// clears the map
