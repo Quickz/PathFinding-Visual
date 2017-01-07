@@ -10,6 +10,7 @@
 		var path = findPath(current.path);
 		var visited = findVisited(current.visited);
 
+		// starting animation
 		runPathAnimation(path, visited, 10);
 
 		// traveling through discovered nodes
@@ -25,28 +26,43 @@
 
 	function runPathAnimation(path, visited, speed)
 	{
+		// removing source, target from path
 		path.shift();
 		path.pop();
+
+		// reversing path to it's initial direction
 		path.reverse();
 
+		// aborting previous animation
+		// if there's any
+		clearTimeout(animTimeout);
+
+		// animating visited nodes
 		animate(visited, 5, speed, function(){
+
+			// animating the path
 			animate(path, 3, speed);
 		});
 	}
 
 	function animate(path, colorNumber, speed, callback, index = 0)
 	{
+		// checking for the end
 		if (index >= path.length)
 		{
 			if (callback)
 				callback();
 			return;
 		}
+
+		// processing
 		coord[path[index].x][path[index].y] = colorNumber;
 		index++;
 		draw();
-		setTimeout(function(){
-			animate(path, colorNumber, speed, callback,  index);
+
+		// repeating the process
+		animTimeout = setTimeout(function(){
+			animate(path, colorNumber, speed, callback, index);
 		}, speed);
 	}
 
@@ -201,6 +217,10 @@
 
 	var selected = 0;
 	var mousedown = false;
+
+	// contains timeout responsible
+	// for path animation
+	var animTimeout;
 
 	// generating empty coordinates for the grid
 	var coord = [];
