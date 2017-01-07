@@ -37,6 +37,8 @@
 		// if there's any
 		clearTimeout(animTimeout);
 
+		animating = true;
+
 		// animating visited nodes
 		animate(visited, 5, speed, function(){
 
@@ -52,6 +54,9 @@
 		{
 			if (callback)
 				callback();
+			else
+				animating = false;
+
 			return;
 		}
 
@@ -222,6 +227,9 @@
 	// for path animation
 	var animTimeout;
 
+	// tells if animation is in progress
+	var animating = false;
+
 	// generating empty coordinates for the grid
 	var coord = [];
 	for (let i = 0; i < 20; i++)
@@ -271,6 +279,11 @@
 
 	// clears the map
 	clearBtn.onclick = () => {
+		
+		// cancelling animation
+		clearTimeout(animTimeout);
+		animating = false;
+
 		clearSquare(2);
 		clearSquare(3);
 		clearSquare(5);
@@ -278,6 +291,10 @@
 	};
 
 	controlBtn.onclick = () => {
+
+		if (animating)
+			return;
+
 		alert("1,2,3,4 - Select a Square \n" +
 			  "Esc/Del - Clear all \n" +
 			  "Enter/Space - Run");
@@ -289,11 +306,21 @@
 
 	// turns on square placement
 	mapElm.onmousedown = e => {
+
+		if (animating)
+			return;
+
 		mousedown = true;
 		placeSquare(e);
 	};
 
-	mapElm.onmousemove = placeSquare;
+	mapElm.onmousemove = e => {
+		
+		if (animating)
+			return;
+
+		placeSquare(e);
+	};
 
 	// controls
 	document.onkeydown = e => {
