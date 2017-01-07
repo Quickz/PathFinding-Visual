@@ -10,14 +10,44 @@
 		var path = findPath(current.path);
 		var visited = findVisited(current.visited);
 
-		for (let i = 0; i < visited.length; i++)
-			coord[visited[i].x][visited[i].y] = 5;
+		runPathAnimation(path, visited, 10);
+
+		// traveling through discovered nodes
+		//for (let i = 0; i < visited.length; i++)
+		//	coord[visited[i].x][visited[i].y] = 5;
 
 		// traveling through the path
-		for (let i = 1; i < path.length - 1; i++)
-			coord[path[i].x][path[i].y] = 3;
+		//for (let i = 1; i < path.length - 1; i++)
+		//	coord[path[i].x][path[i].y] = 3;
 
 		draw();
+	}
+
+	function runPathAnimation(path, visited, speed)
+	{
+		path.shift();
+		path.pop();
+		path.reverse();
+
+		animate(visited, 5, speed, function(){
+			animate(path, 3, speed);
+		});
+	}
+
+	function animate(path, colorNumber, speed, callback, index = 0)
+	{
+		if (index >= path.length)
+		{
+			if (callback)
+				callback();
+			return;
+		}
+		coord[path[index].x][path[index].y] = colorNumber;
+		index++;
+		draw();
+		setTimeout(function(){
+			animate(path, colorNumber, speed, callback,  index);
+		}, speed);
 	}
 
 	function findPath(node)

@@ -15,9 +15,17 @@ const AStarSearch = {
 
 		// discovered nodes to be evaluated
 		var open = [];
+
 		// set of nodes already evaluated
 		var closed = [];
+		
+		// will contain every single node
+		// in a correct order to retrace
+		// it's discovery path
+		var visited = [];
+
 		open.push(start);
+		visited.push(start);
 
 		var current;
 		while (true)
@@ -34,8 +42,8 @@ const AStarSearch = {
 				current.gridY == target.y)
 			{
 				console.log("path found!");
-				closed = closed.concat(open);
-				return { "path": current, "visited": closed };
+				//closed = closed.concat(open);
+				return { "path": current, "visited": visited };
 			}
 
 			// obtaining neighbors
@@ -71,6 +79,11 @@ const AStarSearch = {
 
 					// adding neighbour to open nodes
 					open.push(currNode);
+
+					// adding neighbour to visited nodes
+					if (this.findIndex(visited, currNode) < 0)
+						visited.push(currNode);
+
 				}
 			}
 
