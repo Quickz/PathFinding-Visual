@@ -17,12 +17,10 @@
     		#c3c3c3 2px,
     		transparent 2px
     		);
-
-
 }
 
 /* container for the ui */
-#sq-container {
+#ui-container-1 {
     display: inline-block;
     float: right;
     height: 51px;
@@ -34,7 +32,7 @@
     float: left;
     background: #e9e9e9;
     text-align: center;
-    font-family: calibri;
+    font-family: calibri, sans-serif;
     border: solid #c3c3c3 2px;
     padding: 2px 0;
     width: 67px;
@@ -69,3 +67,9 @@
 }
 
 #controls { margin-top: 2px; }
+
+/* animate checkbox container */
+#animate {
+    font-family: calibri, sans-serif;
+}
+

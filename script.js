@@ -5,21 +5,29 @@
 		var current = AStarSearch.run(source, target, coord);
 		
 		// path not found
-		if (!current) return;
+		if (!current)
+		{
+			draw();
+			return;
+		}
 
 		var path = findPath(current.path);
 		var visited = findVisited(current.visited);
 
 		// starting animation
-		runPathAnimation(path, visited, 10);
+		if (animCheckBox.checked)
+			runPathAnimation(path, visited, 10);
+		// outputting results instantly
+		else
+		{
+			// traveling through discovered nodes
+			for (let i = 0; i < visited.length; i++)
+				coord[visited[i].x][visited[i].y] = 5;
 
-		// traveling through discovered nodes
-		//for (let i = 0; i < visited.length; i++)
-		//	coord[visited[i].x][visited[i].y] = 5;
-
-		// traveling through the path
-		//for (let i = 1; i < path.length - 1; i++)
-		//	coord[path[i].x][path[i].y] = 3;
+			// traveling through the path
+			for (let i = 1; i < path.length - 1; i++)
+				coord[path[i].x][path[i].y] = 3;
+		}
 
 		draw();
 	}
@@ -220,6 +228,8 @@
 	var clearBtn = document.getElementById("clear");
 	var controlBtn = document.getElementById("controls");
 
+	var animCheckBox = document.getElementById("anim-check");
+
 	var selected = 0;
 	var mousedown = false;
 
@@ -250,7 +260,6 @@
 	coord[target.x][target.y] = 4;
 
 	draw();
-
 
 	sourceBtn.onclick = () => {
 		selectSquare(1);
@@ -347,6 +356,7 @@
 			case 32:
 			// enter
 			case 13:
+				e.preventDefault();
 				runBtn.click();
 				break;
 			// esc
