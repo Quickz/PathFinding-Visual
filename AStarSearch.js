@@ -23,7 +23,7 @@ const AStarSearch = {
 		while (true)
 		{
 			// finding lowest f cost
-			current = this.lowestFCost(open);
+			current = this.lowestCost(open);
 			// removing current from open list
 			open.splice(this.findIndex(open, current), 1)[0];
 			// adding current to closed list
@@ -34,12 +34,13 @@ const AStarSearch = {
 				current.gridY == target.y)
 			{
 				console.log("path found!");
+				closed = closed.concat(open);
 				return { "path": current, "visited": closed };
 			}
 
 			// obtaining neighbors
 			current.neighbours = this.getNeighbours(
-				current.gridX, current.gridY);
+				current.gridX, current.gridY, source, target);
 
 			// looping through neighbours
 			var lng = current.neighbours.length;
@@ -54,19 +55,19 @@ const AStarSearch = {
 				// if shorter path found
 				var existing = this.findIndex(open, currNode);
 				if (existing >= 0 &&
-					open[existing].fCost > currNode.fCost)
+					open[existing].fCost >= currNode.fCost &&
+					open[existing].gCost > currNode.gCost)
 				{
+
 					// removing old (bad) node
 					open.splice(existing, 1);
+
 				}
 
-
-				// if shorter or not in open
-				if (existing < 0)
+				// not in open
+				if (this.findIndex(open, currNode) < 0)
 				{
 					currNode.parent = current;
-
-
 
 					// adding neighbour to open nodes
 					open.push(currNode);
@@ -87,12 +88,13 @@ const AStarSearch = {
 	 * - - - Methods - - -
 	*/
 
-	lowestFCost: function(nodes)
+	lowestCost: function(nodes)
 	{
 		var lowest = nodes[0];
 		for (let i = 1; i < nodes.length; i++)
 		{
-			if (nodes[i].fCost < lowest.fCost)
+			if (nodes[i].fCost <= lowest.fCost &&
+				nodes[i].hCost < lowest.hCost)
 				lowest = nodes[i];
 		}
 		return lowest;
@@ -118,7 +120,7 @@ const AStarSearch = {
 			   this.grid[x][y] != 2;
 	},
 
-	getNeighbours: function(x, y)
+	getNeighbours: function(x, y, source, target)
 	{
 		var neighbours = [];
 		// top

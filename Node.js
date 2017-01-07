@@ -5,14 +5,13 @@ class Node
 	{
 		this.gridX = gridX;
 		this.gridY = gridY;
-
+		
 		// distance from starting node
-		this.gCost = this.getCost(this.gridX,
-			this.gridY, target);
+		this.gCost = 0;
 
 		// distance from end node
 		this.hCost = this.getCost(this.gridX,
-			this.gridY, source);
+			this.gridY, target);
 
 		this.nodeParent;
 		this.neighbours = [];
@@ -26,13 +25,9 @@ class Node
 
 	set parent(p)
 	{
-		// recalculating the costs
+		// calculating the cost
 		// based on parent's path
-		var dif = p.gCost - this.gCost;
-		this.gCost = p.gCost +(dif > 0 ? 1 : dif < 0 ? -1 : 0);
-
-		dif = p.hCost - this.hCost;
-		this.hCost = p.hCost + (dif > 0 ? 1 : dif < 0 ? -1 : 0);
+		this.gCost = p.gCost + 1;
 
 		// setting parent
 		this.nodeParent = p;
