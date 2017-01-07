@@ -55,10 +55,10 @@ const AStarSearch = {
 				// if shorter path found
 				var existing = this.findIndex(open, currNode);
 				if (existing >= 0 &&
-					open[existing].fCost >= currNode.fCost &&
-					open[existing].gCost > currNode.gCost)
+					open[existing].parent.fCost >= current.fCost &&
+					open[existing].parent.gCost > current.gCost)
 				{
-
+					
 					// removing old (bad) node
 					open.splice(existing, 1);
 
