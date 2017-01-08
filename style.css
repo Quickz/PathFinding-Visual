@@ -68,8 +68,11 @@
 
 #controls { margin-top: 2px; }
 
-/* animate checkbox container */
-#animate {
+/* ui container for the bottom */
+#ui-container-2 {
     font-family: calibri, sans-serif;
 }
 
+#console {
+    margin-top: 5px;
+}

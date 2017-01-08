@@ -41,9 +41,10 @@ const AStarSearch = {
 			if (current.gridX == target.x &&
 				current.gridY == target.y)
 			{
-				console.log("path found!");
-				//closed = closed.concat(open);
-				return { "path": current, "visited": visited };
+				return {
+					"path": current,
+					"visited": visited
+				};
 			}
 
 			// obtaining neighbors

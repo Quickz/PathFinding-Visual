@@ -2,17 +2,24 @@
 
 	function run()
 	{
+		console.innerHTML = "Loading . . .";
 		var current = AStarSearch.run(source, target, coord);
 		
 		// path not found
 		if (!current)
 		{
 			draw();
+			console.innerHTML = "Path not found";
 			return;
 		}
 
 		var path = findPath(current.path);
 		var visited = findVisited(current.visited);
+
+		// information about the pathfinding process
+		var feedback = "Path length: " + (path.length - 1) + "<br>";
+		feedback += "Squares discovered: " + (visited.length + 1);
+		console.innerHTML = feedback;
 
 		// starting animation
 		if (animCheckBox.checked)
@@ -87,7 +94,6 @@
 			path.push({ "x": node.gridX, "y": node.gridY });
 			node = node.parent;
 		}
-		console.log("Path length: " + (path.length - 1));
 		return path;
 	}
 
@@ -102,7 +108,6 @@
 				 (x != source.x || y != source.y) )
 				visited.push({ "x": x, "y": y });
 		}
-		console.log("Squares discovered: " + (visited.length + 1));
 		return visited;
 	}
 
@@ -230,6 +235,7 @@
 	var controlBtn = document.getElementById("controls");
 
 	var animCheckBox = document.getElementById("anim-check");
+	var console = document.getElementById("console");
 
 	var selected = 0;
 	var mousedown = false;
@@ -293,6 +299,9 @@
 		// cancelling animation
 		clearTimeout(animTimeout);
 		animating = false;
+
+		// cleaning console
+		console.innerHTML = "";
 
 		clearSquare(2);
 		clearSquare(3);
