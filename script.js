@@ -87,7 +87,7 @@
 			path.push({ "x": node.gridX, "y": node.gridY });
 			node = node.parent;
 		}
-		console.log("path length: " + path.length);
+		console.log("Path length: " + (path.length - 1));
 		return path;
 	}
 
@@ -102,6 +102,7 @@
 				 (x != source.x || y != source.y) )
 				visited.push({ "x": x, "y": y });
 		}
+		console.log("Squares discovered: " + (visited.length + 1));
 		return visited;
 	}
 
