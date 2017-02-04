@@ -2,14 +2,14 @@
 
 	function run()
 	{
-		console.innerHTML = "Loading . . .";
+		consoleDiv.innerHTML = "Loading . . .";
 		var current = AStarSearch.run(source, target, coord);
 		
 		// path not found
 		if (!current)
 		{
 			draw();
-			console.innerHTML = "Path not found";
+			consoleDiv.innerHTML = "Path not found";
 			return;
 		}
 
@@ -19,11 +19,14 @@
 		// information about the pathfinding process
 		var feedback = "Path length: " + (path.length - 1) + "<br>";
 		feedback += "Squares discovered: " + (visited.length + 1);
-		console.innerHTML = feedback;
+		consoleDiv.innerHTML = feedback;
 
 		// starting animation
 		if (animCheckBox.checked)
+		{
 			runPathAnimation(path, visited, 10);
+			draw();
+		}
 		// outputting results instantly
 		else
 		{
@@ -34,19 +37,15 @@
 			// traveling through the path
 			for (let i = 1; i < path.length - 1; i++)
 				coord[path[i].x][path[i].y] = 3;
+			
+			draw();
+			drawPathLine(path);
 		}
 
-		draw();
 	}
 
 	function runPathAnimation(path, visited, speed)
 	{
-		// removing source, target from path
-		path.shift();
-		path.pop();
-
-		// reversing path to it's initial direction
-		path.reverse();
 
 		// aborting previous animation
 		// if there's any
@@ -57,21 +56,33 @@
 		// animating visited nodes
 		animate(visited, 5, speed, function(){
 
+			/**
+			 * removing temporarily to avoid 
+			 * coloring the target
+			 */
+			let lastElement = path.pop();
+
 			// animating the path
-			animate(path, 3, speed);
-		});
+			animate(path, 3, speed, function() {
+
+				// re-adding for the line
+				path.push(lastElement);
+
+				drawPathLine(path);
+				animating = false;
+
+			});
+
+		}, 0);
 	}
 
-	function animate(path, colorNumber, speed, callback, index = 0)
+	function animate(path, colorNumber, speed, callback, index = 1)
 	{
 		// checking for the end
 		if (index >= path.length)
 		{
 			if (callback)
 				callback();
-			else
-				animating = false;
-
 			return;
 		}
 
@@ -94,6 +105,10 @@
 			path.push({ "x": node.gridX, "y": node.gridY });
 			node = node.parent;
 		}
+
+		// reversing path to it's initial direction
+		path.reverse();
+
 		return path;
 	}
 
@@ -225,6 +240,158 @@
 		selected = n;
 	}
 
+	function drawLine(line, x = 0, y = 0)
+	{
+		switch (line)
+		{
+			case "horizontal":
+				genLine(x, y, 2, 7, 15, 7);
+				break;
+			case "vertical":
+				genLine(x, y, 8, 0, 8, 13);
+				break;
+			case "rightDown":
+
+				// x
+				genLine(x, y, 2, 7, 8, 7);
+
+				// y
+				genLine(x, y, 8, 4, 8, 13);
+
+				break;
+			case "upRight":
+
+				// x
+				genLine(x, y, 8, 7, 15, 7);
+
+				// y
+				genLine(x, y, 8, 4, 8, 13);
+
+				break;
+			case "downRight":
+
+				// x
+				genLine(x, y, 8, 7, 15, 7);
+
+				// y
+				genLine(x, y, 8, 0, 8, 10);
+
+				break;
+			case "rightUp":
+
+				// x
+				genLine(x, y, 2, 7, 8, 7);
+
+				// y
+				genLine(x, y, 8, 0, 8, 10);
+
+				break;
+		}
+	}
+
+	function genLine(x, y, posx, posy, tarx, tary)
+	{
+		x = 15 * x;
+		y = 2 + 15 * y;
+
+		map.beginPath();
+
+		map.strokeStyle = "orange";
+		map.lineWidth = 5;
+
+		map.moveTo(x + posx, y + posy);
+		map.lineTo(x + tarx, y + tary);
+
+		map.stroke();
+	}
+
+	function drawPathLine(path)
+	{
+
+		var oldx, oldy;
+		for (let i = 0; i < path.length - 1; i++)
+		{
+			let x = path[i].x;
+			let y = path[i].y;
+			
+			if (oldx != null)
+			{
+				if (i < path.length - 1)
+				{
+					let nextx = path[i + 1].x;
+					let nexty = path[i + 1].y;
+
+					if (rightDownL(oldx, oldy, x, y, nextx, nexty))
+						drawLine("rightDown", x, y);
+					else if (upRightL(oldx, oldy, x, y, nextx, nexty))
+						drawLine("upRight", x, y);
+					else if (downRightL(oldx, oldy, x, y, nextx, nexty))
+						drawLine("downRight", x, y);
+					else if (rightUpL(oldx, oldy, x, y, nextx, nexty))
+						drawLine("rightUp", x, y);
+					else
+						checkForHorVerLine(x, y, oldx, oldy);
+				}
+				else
+					checkForHorVerLine(x, y, oldx, oldy);
+			}
+
+			oldx = x;
+			oldy = y;
+		}
+
+	}
+
+	function checkForHorVerLine(x, y, oldx, oldy)
+	{
+		if (checkVerL(x, y, oldx, oldy))
+			drawLine("vertical", x, y);
+		else if (checkHorL(x, y, oldx, oldy))
+			drawLine("horizontal", x, y);
+	}
+
+
+
+	/**
+	 * boolean functions for determining
+	 * what sort of a line to draw in a square
+	 */
+
+	function checkVerL(x, y, oldx, oldy)
+	{
+		return x == oldx && (y > oldy || y < oldy);
+	}
+
+	function checkHorL(x, y, oldx, oldy)
+	{
+		return y == oldy && (x > oldx || x < oldx);
+	}
+
+	function rightDownL(oldx, oldy, x, y, nextx, nexty)
+	{
+		return oldx < x && nextx == x && nexty > y ||
+			   nextx < x && oldx == x && oldy > y;
+	}
+
+	function upRightL(oldx, oldy, x, y, nextx, nexty)
+	{
+		return oldy > y && nexty == y && nextx > x ||
+			   nexty > y && oldy == y && oldx > x;
+	}
+
+	function downRightL(oldx, oldy, x, y, nextx, nexty)
+	{
+		return oldy < y && nexty == y && nextx > x ||
+			   nexty < y && oldy == y && oldx > x;
+	}
+
+	function rightUpL(oldx, oldy, x, y, nextx, nexty)
+	{
+		return oldx < x && nextx == x && nexty < y ||
+			   nextx < x && oldx == x && oldy < y;
+	}
+
+
 	// buttons
 	var sourceBtn = document.getElementById("source");
 	var targetBtn = document.getElementById("target");
@@ -235,7 +402,7 @@
 	var controlBtn = document.getElementById("controls");
 
 	var animCheckBox = document.getElementById("anim-check");
-	var console = document.getElementById("console");
+	var consoleDiv = document.getElementById("console");
 
 	var selected = 0;
 	var mousedown = false;
@@ -301,7 +468,7 @@
 		animating = false;
 
 		// cleaning console
-		console.innerHTML = "";
+		consoleDiv.innerHTML = "";
 
 		clearSquare(2);
 		clearSquare(3);
@@ -378,4 +545,6 @@
 		}
 	}
 
+
+	
 })();
