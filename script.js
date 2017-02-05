@@ -316,22 +316,17 @@
 			
 			if (oldx != null)
 			{
-				if (i < path.length - 1)
-				{
-					let nextx = path[i + 1].x;
-					let nexty = path[i + 1].y;
+				let nextx = path[i + 1].x;
+				let nexty = path[i + 1].y;
 
-					if (rightDownL(oldx, oldy, x, y, nextx, nexty))
-						drawLine("rightDown", x, y);
-					else if (upRightL(oldx, oldy, x, y, nextx, nexty))
-						drawLine("upRight", x, y);
-					else if (downRightL(oldx, oldy, x, y, nextx, nexty))
-						drawLine("downRight", x, y);
-					else if (rightUpL(oldx, oldy, x, y, nextx, nexty))
-						drawLine("rightUp", x, y);
-					else
-						checkForHorVerLine(x, y, oldx, oldy);
-				}
+				if (rightDownL(oldx, oldy, x, y, nextx, nexty))
+					drawLine("rightDown", x, y);
+				else if (upRightL(oldx, oldy, x, y, nextx, nexty))
+					drawLine("upRight", x, y);
+				else if (downRightL(oldx, oldy, x, y, nextx, nexty))
+					drawLine("downRight", x, y);
+				else if (rightUpL(oldx, oldy, x, y, nextx, nexty))
+					drawLine("rightUp", x, y);
 				else
 					checkForHorVerLine(x, y, oldx, oldy);
 			}
