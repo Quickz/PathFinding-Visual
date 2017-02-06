@@ -126,10 +126,15 @@
 		return visited;
 	}
 
-	// fills map acoording to map array contents
+	function mapClear()
+	{
+		map.clearRect(0, 0, mapElm.width, mapElm.height);
+	}
+
+	// fills map according to map array contents
 	function draw()
 	{
-		drawSquare(1, 1, "red");
+		mapClear();
 		for (let i = 0; i < 20; i++)
 		{
 			for (let j = 0; j < 20; j++)
@@ -245,45 +250,45 @@
 		switch (line)
 		{
 			case "horizontal":
-				genLine(x, y, 2, 7, 15, 7);
+				genLine(x, y, 0, 7, 17, 7);
 				break;
 			case "vertical":
-				genLine(x, y, 8, 0, 8, 13);
+				genLine(x, y, 8, -2, 8, 15);
 				break;
 			case "rightDown":
 
 				// x
-				genLine(x, y, 2, 7, 8, 7);
+				genLine(x, y, 0, 7, 8, 7);
 
 				// y
-				genLine(x, y, 8, 4, 8, 13);
+				genLine(x, y, 8, 4, 8, 15);
 
 				break;
 			case "upRight":
 
 				// x
-				genLine(x, y, 8, 7, 15, 7);
+				genLine(x, y, 8, 7, 17, 7);
 
 				// y
-				genLine(x, y, 8, 4, 8, 13);
+				genLine(x, y, 8, 4, 8, 15);
 
 				break;
 			case "downRight":
 
 				// x
-				genLine(x, y, 8, 7, 15, 7);
+				genLine(x, y, 8, 7, 17, 7);
 
 				// y
-				genLine(x, y, 8, 0, 8, 10);
+				genLine(x, y, 8, -2, 8, 10);
 
 				break;
 			case "rightUp":
 
 				// x
-				genLine(x, y, 2, 7, 8, 7);
+				genLine(x, y, 0, 7, 8, 7);
 
 				// y
-				genLine(x, y, 8, 0, 8, 10);
+				genLine(x, y, 8, -2, 8, 10);
 
 				break;
 		}
@@ -539,7 +544,5 @@
 				break;
 		}
 	}
-
-
-	
+ 
 })();
