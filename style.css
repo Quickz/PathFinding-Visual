@@ -37,7 +37,10 @@
     padding: 2px 0;
     width: 67px;
 }
-.selection-square:hover { background: #f1f1f1; }
+.selection-square:hover {
+    background: #f1f1f1;
+    cursor: pointer;
+}
 
 /* selected square itself */
 .selection-square div {
@@ -64,6 +67,7 @@
 }
 .ui-btn:hover {
     background: #F9A825;
+    cursor: pointer;
 }
 
 #controls { margin-top: 2px; }
@@ -76,3 +80,6 @@
 #console {
     margin-top: 5px;
 }
+
+/* checkmark */
+#anim-check:hover { cursor: pointer; }
